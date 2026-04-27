@@ -3,10 +3,9 @@ import { useParams, Link } from 'react-router-dom'
 import PlayerCard from '../components/PlayerCard'
 import Loading from '../components/Loading'
 
-// Em dev usa o proxy do Vite pra evitar CORS. Em produção chama direto.
 const ESPN_BASE = import.meta.env.DEV
   ? '/espn-api'
-  : 'https://site.api.espn.com'
+  : 'https://corsproxy.io/?https://site.api.espn.com'
 
 function TeamRoster() {
   const { teamId } = useParams()

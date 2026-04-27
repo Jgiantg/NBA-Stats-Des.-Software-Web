@@ -3,7 +3,7 @@ import Loading from '../components/Loading'
 
 const ESPN_BASE = import.meta.env.DEV
   ? '/espn-api'
-  : 'https://site.api.espn.com'
+  : 'https://corsproxy.io/?https://site.api.espn.com'
 
 function Standings() {
   const [conferencias, setConferencias] = useState([])

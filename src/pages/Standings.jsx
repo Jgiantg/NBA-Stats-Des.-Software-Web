@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react'
 import Loading from '../components/Loading'
 
-const ESPN_BASE = import.meta.env.DEV
-  ? '/espn-api'
-  : 'https://corsproxy.io/?https://site.api.espn.com'
+function espnFetch(path) {
+  if (import.meta.env.DEV) return fetch('/espn-api' + path)
+  return fetch('https://api.allorigins.win/raw?url=' + encodeURIComponent('https://site.api.espn.com' + path))
+}
 
 function Standings() {
   const [conferencias, setConferencias] = useState([])
@@ -11,10 +12,9 @@ function Standings() {
   const [erro, setErro] = useState(null)
 
   useEffect(() => {
-    fetch(`${ESPN_BASE}/apis/v2/sports/basketball/nba/standings`)
+    espnFetch('/apis/v2/sports/basketball/nba/standings')
       .then((res) => res.json())
       .then((data) => {
-        // Cada item de children é uma conferência (Leste e Oeste)
         const lista = data.children || []
         setConferencias(lista)
         setCarregando(false)
@@ -46,7 +46,6 @@ function Standings() {
             </h2>
 
             <div className="bg-gray-800 rounded-xl overflow-hidden shadow-lg">
-              {/* Cabeçalho */}
               <div className="grid grid-cols-[2rem_1fr_3rem_3rem_3rem_4rem] items-center px-4 py-2 bg-gray-700 text-gray-400 text-xs font-semibold uppercase">
                 <span>#</span>
                 <span>Time</span>
@@ -56,11 +55,9 @@ function Standings() {
                 <span className="text-center">Dif</span>
               </div>
 
-              {/* Linhas */}
               {conf.standings?.entries?.map((entry, index) => {
                 const time = entry.team
                 const posicao = index + 1
-                // Playoff = top 6, Play-in = 7º e 8º
                 const isPlayoff = posicao <= 6
                 const isPlayIn = posicao === 7 || posicao === 8
 
@@ -102,7 +99,6 @@ function Standings() {
               })}
             </div>
 
-            {/* Legenda */}
             <div className="flex gap-4 mt-2 text-xs text-gray-500">
               <span className="flex items-center gap-1">
                 <span className="w-2 h-2 rounded-full bg-green-500 inline-block"></span>

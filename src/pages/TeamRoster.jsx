@@ -3,9 +3,10 @@ import { useParams, Link } from 'react-router-dom'
 import PlayerCard from '../components/PlayerCard'
 import Loading from '../components/Loading'
 
-const ESPN_BASE = import.meta.env.DEV
-  ? '/espn-api'
-  : 'https://corsproxy.io/?https://site.api.espn.com'
+function espnFetch(path) {
+  if (import.meta.env.DEV) return fetch('/espn-api' + path)
+  return fetch('https://api.allorigins.win/raw?url=' + encodeURIComponent('https://site.api.espn.com' + path))
+}
 
 function TeamRoster() {
   const { teamId } = useParams()
@@ -15,8 +16,7 @@ function TeamRoster() {
   const [erro, setErro] = useState(null)
 
   useEffect(() => {
-    // Busca o elenco do time pelo ID
-    fetch(`${ESPN_BASE}/apis/site/v2/sports/basketball/nba/teams/${teamId}/roster`)
+    espnFetch(`/apis/site/v2/sports/basketball/nba/teams/${teamId}/roster`)
       .then((res) => res.json())
       .then((data) => {
         setElenco(data.athletes || [])
@@ -30,7 +30,6 @@ function TeamRoster() {
       })
   }, [teamId])
 
-  // Formata data de nascimento para dd/mm/aaaa
   function formatarData(dataISO) {
     if (!dataISO) return 'N/A'
     const [ano, mes, dia] = dataISO.split('T')[0].split('-')

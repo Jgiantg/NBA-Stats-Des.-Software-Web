@@ -2,9 +2,10 @@ import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import Loading from '../components/Loading'
 
-const ESPN_BASE = import.meta.env.DEV
-  ? '/espn-api'
-  : 'https://corsproxy.io/?https://site.api.espn.com'
+function espnFetch(path) {
+  if (import.meta.env.DEV) return fetch('/espn-api' + path)
+  return fetch('https://api.allorigins.win/raw?url=' + encodeURIComponent('https://site.api.espn.com' + path))
+}
 
 function Teams() {
   const [times, setTimes] = useState([])
@@ -12,8 +13,7 @@ function Teams() {
   const [erro, setErro] = useState(null)
 
   useEffect(() => {
-    // Busca todos os times da NBA
-    fetch(`${ESPN_BASE}/apis/site/v2/sports/basketball/nba/teams`)
+    espnFetch('/apis/site/v2/sports/basketball/nba/teams')
       .then((res) => res.json())
       .then((data) => {
         const lista = data.sports[0].leagues[0].teams

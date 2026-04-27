@@ -2,9 +2,10 @@ import { useState, useEffect } from 'react'
 import GameCard from '../components/GameCard'
 import Loading from '../components/Loading'
 
-const ESPN_BASE = import.meta.env.DEV
-  ? '/espn-api'
-  : 'https://corsproxy.io/?https://site.api.espn.com'
+function espnFetch(path) {
+  if (import.meta.env.DEV) return fetch('/espn-api' + path)
+  return fetch('https://api.allorigins.win/raw?url=' + encodeURIComponent('https://site.api.espn.com' + path))
+}
 
 function Home() {
   const [jogos, setJogos] = useState([])
@@ -12,8 +13,7 @@ function Home() {
   const [erro, setErro] = useState(null)
 
   useEffect(() => {
-    // Busca os jogos do dia na ESPN
-    fetch(`${ESPN_BASE}/apis/site/v2/sports/basketball/nba/scoreboard`)
+    espnFetch('/apis/site/v2/sports/basketball/nba/scoreboard')
       .then((res) => res.json())
       .then((data) => {
         setJogos(data.events || [])

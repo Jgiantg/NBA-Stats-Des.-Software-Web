@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react'
 import Loading from '../components/Loading'
 
-const ESPN_BASE = import.meta.env.DEV
-  ? '/espn-api'
-  : 'https://corsproxy.io/?https://site.api.espn.com'
+function espnFetch(path) {
+  if (import.meta.env.DEV) return fetch('/espn-api' + path)
+  return fetch('https://api.allorigins.win/raw?url=' + encodeURIComponent('https://site.api.espn.com' + path))
+}
 
 function News() {
   const [noticias, setNoticias] = useState([])
@@ -11,7 +12,7 @@ function News() {
   const [erro, setErro] = useState(null)
 
   useEffect(() => {
-    fetch(`${ESPN_BASE}/apis/site/v2/sports/basketball/nba/news`)
+    espnFetch('/apis/site/v2/sports/basketball/nba/news')
       .then((res) => res.json())
       .then((data) => {
         setNoticias(data.articles || [])

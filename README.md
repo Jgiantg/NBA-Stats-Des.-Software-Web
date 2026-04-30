@@ -15,7 +15,7 @@ Aplicação web desenvolvida em React que consome a API pública da ESPN para ex
 | React Router DOM v6 | Roteamento e rotas dinâmicas |
 | Tailwind CSS | Estilização |
 | React Leaflet + Leaflet | Mapa interativo |
-| ESPN Public API | Dados reais da NBA (sem chave de API) |
+| ESPN Public API | Dados reais da NBA |
 | gh-pages | Deploy no GitHub Pages |
 
 ---
